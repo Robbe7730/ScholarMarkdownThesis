@@ -1,0 +1,123 @@
+@import "lncs.scss";
+@import "shared.scss";
+@import "shared_override.scss";
+
+header {
+  .actions, .context {
+    display: none;
+  }
+}
+
+// Table of contents
+ol.index-entries {
+  margin-bottom: 0;
+}
+
+ol.index-entries[depth="0"] {
+  li {
+    font-weight: bold;
+  }
+}
+
+ol.index-entries[depth="1"] {
+  margin-bottom: 1em;
+  li {
+    font-weight: normal;
+  }
+}
+
+figure.numbered pre {
+  counter-reset: precode;
+
+  code {
+    &::before {
+      color: lightgray;
+      left: -1.75em;
+      text-align: right;
+      display: inline-block;
+      width: 1.5em;
+      content: counter(precode) " ";
+      counter-increment: precode;
+    }
+  }
+}
+
+// ---- CUSTOM ----
+
+.pagebreak {
+  page-break-after: always;
+}
+
+figure {
+  display: flex;
+}
+
+.frontpage {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  align-items: flex-start;
+  height: 297mm;
+  width: 210mm;
+
+  margin-top: 40.8px !important;
+  margin-left: 74.6px !important;
+  margin-bottom: 3.3% !important;
+}
+
+.frontpage > .logos > .ugent-logo {
+  position: absolute;
+  bottom: 0;
+  width: 10%;
+}
+
+.frontpage > .logos > .faculty-logo {
+  width: 20.5%;
+}
+
+.frontpage > .title {
+  position: absolute;
+  top: 34%;
+  font-size: 20pt !important;
+}
+
+.frontpage > .author {
+  position: absolute;
+  top: 52%;
+}
+
+.frontpage > .author > .name {
+  font-size: 14pt !important;
+}
+
+.frontpage > .author > .studentnumber {
+  font-size: 10pt !important;
+}
+
+.frontpage > ul {
+  list-style-type: none;
+}
+
+.frontpage > .supervisors {
+  font-size: 12pt !important;
+  position: absolute;
+  top: 60.4%;
+}
+
+.frontpage > .description {
+  font-size: 10pt !important;
+  position: absolute;
+  top: 68.9%;
+  text-align: left;
+}
+
+.frontpage > .academic_year {
+  font-size: 10pt !important;
+  position: absolute;
+  top: 74.1%;
+}
+
+body {
+  width: 100% !important;
+  height: 100% !important;
+}
