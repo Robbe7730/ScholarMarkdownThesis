@@ -403,5 +403,18 @@ ol.index-entries {
   display: none;
 }
 
+.frontpage > .logos > figure > img {
+  height: 10vh;
+}
+
+.frontpage > .logos {
+  display: flex;
+  justify-content: space-between;
+}
+
+.frontpage > .description {
+  font-style: italic;
+}
+
 @import "shared.scss";
 @import "shared_override.scss";

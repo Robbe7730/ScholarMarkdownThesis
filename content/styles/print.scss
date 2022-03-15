@@ -98,10 +98,14 @@ figure {
   list-style-type: none;
 }
 
-.frontpage > .supervisors {
+.frontpage > .people {
   font-size: 12pt !important;
   position: absolute;
   top: 60.4%;
+}
+
+.frontpage > .people > .Author {
+  display: none;
 }
 
 .frontpage > .description {
