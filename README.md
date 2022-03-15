@@ -1,12 +1,17 @@
-# My Scholarly Article
+# ScholarMarkdownThesis
+
+Template to use [ScholarMarkdown][scholarmarkdown] for a Ghent University
+masters thesis.
 
 ## Development mode
+
 ```
 bundle install
 bundle exec guard
 ```
 
 ## Build
+
 ```
 bundle install
 bundle exec nanoc compile
@@ -14,4 +19,5 @@ bundle exec nanoc compile
 
 View on http://localhost:3000/
 
-This article makes use of the [ScholarMarkdown](https://github.com/rubensworks/ScholarMarkdown/) framework.
+
+[scholarmarkdown]: https://github.com/rubensworks/ScholarMarkdown/
