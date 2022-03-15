@@ -1,21 +1,36 @@
 ---
-title: Collaborative Storytelling on the Semantic Web
+title: My Master's Thesis
 people:
-  - name: Robbe Van Herck
-    url: https://robbevanherck.be
-    webid: https://robbevanherck.be/me
-    student_number: 01710097
+  - name: Jan Janssens
+    url: https://example.com
+    webid: https://example.com/me
+    student_number: 0123456789
     function: Author
-  - name: Prof. dr. Pieter Colpaert
+  - name: Prof. dr. Jef Jefferson
     function: Supervisor
-  - name: Harm Delva
+  - name: Peter Peterson
     function: Counsellor
 degree: Master of Science in de informatica
 academic_year: 2021-2022
 ---
 
 <main>
-  <%= section 'abstract' %>
+  <%= section 'summary_en' %><span class="pagebreak"></span>
+  <%= section 'summary_nl' %><span class="pagebreak"></span>
+  <%= section 'extended_abstract_en' %><span class="pagebreak"></span>
+  <%= section 'extended_abstract_nl' %><span class="pagebreak"></span>
+  <%= section 'vulgarizing_summary' %><span class="pagebreak"></span>
+  <%= section 'acknowledgments' %><span class="pagebreak"></span>
+  <%= section 'permission' %><span class="pagebreak"></span>
+  <div id="scholarmarkdown-toc-index"></div><span class="pagebreak"></span>
+
+  <% (1..2).each do |num| %>
+    <%= section 'corpus/chapter' + num.to_s %><span class="pagebreak"></span>
+  <% end %>
+
+  <h2>TODO: Bibliography</h2>
+  <h2>Appendices</h2>
+  
 </main>
 
 <footer></footer>
