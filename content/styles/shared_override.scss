@@ -5,5 +5,12 @@ body {
 .logos {
     display: flex;
     flex-direction: row;
-    color: red;
+}
+
+.noincrement {
+  counter-increment: none !important;
+
+  &::before {
+    content: "" !important;
+  }
 }
