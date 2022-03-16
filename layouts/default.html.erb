@@ -32,7 +32,7 @@
 
     <ul id="people" class="people">
     <% @item[:people].each do |person| %>
-      <li class="<%= person[:function] %>"> <%= person[:function] %>: <%= person[:name] %> </li>
+      <li class="<%= person[:function] %>"> <%= person[:function] %>: <%= person person[:name], person[:url], person[:webid] %> </li>
     <% end %>
     </ul>
 
