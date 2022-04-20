@@ -17,6 +17,8 @@ compile '/index.*' do
   filter :scholar_citation, bibfile: items['/references.bib'],
                             style: 'lncs-custom'
   filter :kramdown
+  filter :scholar_acronym, acronyms: items['/acronyms.csv']
+
   filter :scholar_hyphenate_iri
   filter :scholar_include_code
   filter :scholar_labelify
