@@ -122,6 +122,13 @@ figure {
 }
 
 body {
+  height: 297mm;
+  width: 210mm;
+
   width: 100% !important;
   height: 100% !important;
+}
+
+.todo {
+    display: none;
 }

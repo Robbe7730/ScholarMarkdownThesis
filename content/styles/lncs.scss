@@ -22,12 +22,12 @@ LNCS template styles: http://www.springer.com/computer/lncs?SGWID=0-164-6-793341
 /*2480 pixels x 3508 pixels (print resolution)*/
 /*595 pixels x 842 pixels (screen resolution)*/
 /*size:A4;*/
-margin:52mm 0;
+margin:52mm 20mm;
 }
 
 body {
-font-size:10pt !important;
-margin:0 auto !important;
+font-size:11pt !important;
+margin:0.5 auto !important;
 padding:0 !important;
 width:122mm !important;
 height:193mm !important; /* A4 - LNCS height*/
@@ -222,10 +222,15 @@ margin-bottom:0.5em;
 }
 h4 {
 margin-top:1em;
-display:inline;
+margin-bottom:0.25em;
+// display:inline;
 }
 h5 {
 display:inline;
+}
+p {
+margin-top: 0.4em;
+margin-bottom: 0.5em;
 }
 
 #subtitle {
@@ -255,14 +260,16 @@ border-left:2px solid #ccc;
 }
 section article h1,
 section article h2,
-section article h3 {
+section article h3,
+section article h4 {
 margin-bottom:0;
 font-size:1em;
 font-weight:normal;
 }
 section article h1,
 section article h2,
-section article h3 {
+section article h3,
+section article h4 {
 margin-top:0;
 }
 section article img {
@@ -332,6 +339,8 @@ main {
 
   // Subsections
   h3 {
+    counter-reset: subsubsection;
+
     &::before {
       counter-increment: subsection;
       content: counter(section) "." counter(subsection) ". ";
@@ -340,9 +349,13 @@ main {
 
   // Paragraphs
   h4 {
-    margin: 0 1em 0 0;
-    float: left;
-    clear: left;
+    &::before {
+      counter-increment: subsubsection;
+      content: counter(section) "." counter(subsection) "." counter(subsubsection) ". ";
+    }
+    // margin: 0 1em 0 0;
+    // float: left;
+    // clear: left;
   }
 
   // Links
@@ -499,6 +512,7 @@ display:block;
 
 
 h3 + div section:before,
+h4 + div subsection:before,
 h4 + p:after,
 h5 + p:after,
 h4 + div p:after,
