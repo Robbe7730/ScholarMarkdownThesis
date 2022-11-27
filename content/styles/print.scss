@@ -11,6 +11,10 @@ header {
 // Table of contents
 ol.index-entries {
   margin-bottom: 0;
+
+  a {
+    color:#000;
+  }
 }
 
 ol.index-entries[depth="0"] {
@@ -63,6 +67,10 @@ figure {
   margin-top: 40.8px !important;
   margin-left: 74.6px !important;
   margin-bottom: 3.3% !important;
+
+  a {
+    color:#000;
+  }
 }
 
 .frontpage > .logos > .ugent-logo {
