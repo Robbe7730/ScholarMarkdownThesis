@@ -1,3 +1,4 @@
+@import "acm-select.scss";
 @import "lncs.scss";
 @import "shared.scss";
 @import "shared_override.scss";
@@ -44,12 +45,9 @@ figure.numbered pre {
 
 // ---- CUSTOM ----
 
-.pagebreak {
+.pagebreak, section {
   page-break-after: always;
-}
-
-figure {
-  display: flex;
+  clear: both !important;
 }
 
 .frontpage {
@@ -124,4 +122,33 @@ figure {
 body {
   width: 100% !important;
   height: 100% !important;
+}
+
+// Overrides lncs to make h4 not appear all over the place
+h4 {
+  float: none !important;
+  display: block !important;
+}
+
+.screenonly {
+  display: none;
+}
+
+.double-column {
+  .fullwidth {
+    display: block;
+    column-span: all;
+  }
+
+  figure {
+    width: auto;
+    float: none;
+  }
+}
+
+.acm {
+  line-height: 1.2;
+  * {
+    clear: none;
+  }
 }

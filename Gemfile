@@ -18,6 +18,9 @@ gem 'unicode_utils'
 gem 'citeproc-ruby', '>= 1.1.6'
 gem 'csl-styles'
 
+# syntax highlighting
+gem 'rouge'
+
 group :development do
   # live view
   gem 'guard-nanoc', '~> 2.1.2'

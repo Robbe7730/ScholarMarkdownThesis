@@ -3,42 +3,60 @@
 <head>
   <meta charset="utf-8" />
   <title property="foaf:name schema:name"><%= h @item[:title].gsub(/[\n]/, ' ') %></title>
+  <script src="scripts/reveal.js"></script>
   <link rel="stylesheet" media="screen" href="styles/screen.css" />
   <link rel="stylesheet" media="print"  href="styles/print.css" />
+  <link rel="stylesheet" media="all"    href="styles/font-awesome.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="schema:sourceOrganization" content="http://ugent.be">
   <%= @items['/styles/katex.css'].nil? ? '' : '<link rel="stylesheet" media="all"    href="styles/katex.css" />' %>
 </head>
-<body prefix="dctypes: http://purl.org/dc/dcmitype/ pimspace: http://www.w3.org/ns/pim/space# rsa: http://www.w3.org/ns/auth/rsa# cert: http://www.w3.org/ns/auth/cert# wgs: http://www.w3.org/2003/01/geo/wgs84_pos# biblio: http://purl.org/net/biblio# bibo: http://purl.org/ontology/bibo/ book: http://purl.org/NET/book/vocab# ov: http://open.vocab.org/terms/ doap: http://usefulinc.com/ns/doap# dbr: http://dbpedia.org/resource/ dbp: http://dbpedia.org/property/ sio: http://semanticscience.org/resource/ opmw: http://www.opmw.org/ontology/ deo: http://purl.org/spar/deo/ doco: http://purl.org/spar/doco/ cito: http://purl.org/spar/cito/ fabio: http://purl.org/spar/fabio/ solid: http://www.w3.org/ns/solid/terms# acl: http://www.w3.org/ns/auth/acl# dio: https://w3id.org/dio# lsc: http://linkedscience.org/lsc/ns#" typeof="schema:CreativeWork sioc:Post prov:Entity lsc:Research">
-  <header markdown="1" class="frontpage">
+<body prefix="dctypes: http://purl.org/dc/dcmitype/ pimspace: http://www.w3.org/ns/pim/space# rsa: http://www.w3.org/ns/auth/rsa# cert: http://www.w3.org/ns/auth/cert# wgs: http://www.w3.org/2003/01/geo/wgs84_pos# biblio: http://purl.org/net/biblio# bibo: http://purl.org/ontology/bibo/ book: http://purl.org/NET/book/vocab# ov: http://open.vocab.org/terms/ doap: http://usefulinc.com/ns/doap# dbr: http://dbpedia.org/resource/ dbp: http://dbpedia.org/property/ sio: http://semanticscience.org/resource/ opmw: http://www.opmw.org/ontology/ deo: http://purl.org/spar/deo/ doco: http://purl.org/spar/doco/ cito: http://purl.org/spar/cito/ fabio: http://purl.org/spar/fabio/ solid: http://www.w3.org/ns/solid/terms# acl: http://www.w3.org/ns/auth/acl# dio: https://w3id.org/dio# lsc: http://linkedscience.org/lsc/ns#" typeof="schema:CreativeWork sioc:Post prov:Entity lsc:Research schema:Thesis">
+  <header markdown="1" class="frontpage chapter" id="frontpage">
+    <% author_group = @item[:credit].find { |credit| credit[:attribution] == "Author" } %>
 
-    <% author = @item[:people].find { |person| person[:function] == "Author" } %>
-
-    <section class="logos">
-      <figure class="ugent-logo">
+    <span class="logos">
+      <span class="ugent-logo">
         <img src="img/logo-ugent.png" alt="[Logo Ghent University]">
-      </figure>
+      </span>
 
-      <figure class="faculty-logo">
+      <span class="faculty-logo">
         <img src="img/logo-we.png" alt="[Logo Faculty of Sciences]">
-      </figure>
-    </section>
+      </span>
+    </span>
 
-    <h1 class="title"> <%= @item[:title] %> </h1>
+    <h1 class="title noincrement"> <%= @item[:title] %> </h1>
 
     <ul id="author" class="author printonly">
-      <li class="name"> <%= person author[:name], author[:url], author[:webid] %> </li>
-      <li class="studentnumber"> Student number: <%= author[:student_number] %> </li>
+      <li class="name">
+        <%= author_group[:people].map { |author|
+          person author[:name], author[:url], author[:webid], true
+        }.join(", ") %>
+      </li>
+      <li class="studentnumber">
+        Student number<%= author_group[:people].length == 1 ? "" : "s" %>:
+        <%= author_group[:people].map { |author|
+          author[:student_number]
+        }.join(", ") %>
+      </li>
     </ul>
+    <% author_group[:people].each do |author| %>
+    <% end %>
 
     <ul id="people" class="people">
-    <% @item[:people].each do |person| %>
-      <li class="<%= person[:function] %>"> <%= person[:function] %>: <%= person person[:name], person[:url], person[:webid] %> </li>
+    <% @item[:credit].each do |credit| %>
+      <li class="<%= credit[:attribution] %>">
+        <%= credit[:attribution] + (credit[:people].length == 1 ? "" : "s") %>:
+        <%= credit[:people].map { |person|
+          person person[:name], person[:url], person[:webid], credit[:attribution] == "Author"
+        }.join(", ") %>
+      </li>
     <% end %>
     </ul>
 
     <div class="description">
       Master's dissertation submitted in order to obtain the academic degree of <br class="printonly"/>
-      <%= @item[:degree] %>
+      <span property="schema:inSupportOf"><%= @item[:degree] %></span>
     </div>
 
     <div class="academic_year"> 
@@ -50,5 +68,10 @@
   <div class="pagebreak"> </div>
 
   <%= yield %>
+
+  <footer class="screenonly">
+    <div class="nav-left" onClick="previousPage()"><i class="fa-solid fa-angle-left"></i></div>
+    <div class="nav-right" onClick="nextPage()"><i class="fa-solid fa-angle-right"></i></div>
+  </footer>
 </body>
 </html>

@@ -1,5 +1,4 @@
-## Acknowledgments
+# Acknowledgments
 {:.noincrement}
 
 Thanks everyone!
-

@@ -1,4 +1,4 @@
-## Vulgarizing Summary
+# Vulgarizing Summary
 {:.noincrement}
 
-This is the vulgarizing summary (max 1 page).
+This is like a summary, but more vulgar(izing)...

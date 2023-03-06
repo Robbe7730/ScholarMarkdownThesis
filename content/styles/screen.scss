@@ -1,9 +1,56 @@
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,700i');
 @import 'reset.scss';
 
 @media screen {
   #repeating-title {
     display: none;
+  }
+}
+
+.hidden {
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.chapter {
+  max-width: 800px;
+  position: absolute;
+  top: 1em;
+  width: 100%;
+  overflow: hidden;
+}
+
+footer {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+
+  top: 0;
+  margin: 0, auto;
+  left: 0;
+
+  div {
+    position: fixed;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    i {
+      padding: 3em;
+    }
+
+    &:hover {
+      background: #0a0a0a0a;
+    }
+  }
+
+  .nav-left {
+    left: 0;
+  }
+
+  .nav-right {
+    right: 0;
   }
 }
 
@@ -27,7 +74,7 @@ body {
   margin: 0 auto;
   padding: 1em;
 
-  font: 13pt/1.4 "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 13pt/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
   max-width: 800px;
 }
 
@@ -164,11 +211,6 @@ main, #appendix {
     }
   }
 
-  // Paragraphs
-  p {
-    margin-bottom: 1em;
-  }
-
   // Lists
   ul, ol {
     margin: 1em 0;
@@ -203,26 +245,6 @@ main, #appendix {
     }
   }
 
-  // Figures
-  figure {
-    background: darken(white, 4%);
-    padding: 1em 2em;
-    margin: 1em 0;
-
-    figcaption {
-      margin: 1em 0 .5em;
-
-      .label {
-        float: left;
-        font-weight: bold;
-        margin-right: .5em;
-      }
-      p {
-        margin: 0;
-      }
-    }
-  }
-
   // References
   .references {
     font-size: .95em;
@@ -231,28 +253,6 @@ main, #appendix {
       color: #999;
       background: none;
     }
-  }
-}
-
-#appendix {
-  h1 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 1em 0 .5em;
-  }
-  // Sections
-  h2 {
-    &::before {
-      content: counter(section, upper-alpha) ". ";
-    }
-  }
-}
-
-footer {
-  h2 {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 1em 0 .5em;
   }
 }
 
@@ -302,7 +302,7 @@ q {
 
 pre {
   line-height: 1.2;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
 
   code {
@@ -398,11 +398,6 @@ tbody th {
   text-align:left;
 }
 
-// Hide table of contents in screen-mode
-ol.index-entries {
-  display: none;
-}
-
 .frontpage > .logos > .ugent-logo > img {
   height: 10vh;
 }
@@ -418,6 +413,13 @@ ol.index-entries {
 
 .frontpage > .description {
   font-style: italic;
+}
+
+h1 {
+  font-size: 1.9em;
+  letter-spacing: -.01em;
+  font-weight: bold;
+  margin: 1em 0 .5em;
 }
 
 @import "shared.scss";

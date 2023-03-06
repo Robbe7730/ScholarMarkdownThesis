@@ -1,8 +1,4 @@
-figure {
-  img {
-    width: 100%;
-  }
-}
+@import "style.scss";
 
 .todo {
   color: red;
@@ -12,7 +8,7 @@ figure {
 }
 .comment {
   &, & * {
-    color: red !important;
+    color: #ff7f00 !important;
   }
 
   font-style: italic;
@@ -47,10 +43,19 @@ del.comment {
 }
 .reference.needed {
   &:before {
-    content: "[?!]";
+    content: "[?]";
     color: red;
     font-weight: bold;
   }
+}
+
+:not(pre) > code {
+  font-family: "Ubuntu Mono", monospace;
+  white-space: nowrap;
+  background: #eee;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 0px 0.2em;
 }
 
 code {
@@ -93,5 +98,239 @@ ol.index-entries {
 
   li {
     margin-left: 1em;
+  }
+}
+
+body {
+  font: 12pt/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+figure {
+  background: darken(white, 4%);
+  padding: 1em 2em !important;
+  margin: 1em 1em;
+  margin-top: 0;
+  width: 50%;
+  float: right;
+  vertical-align: bottom;
+
+  img {
+    width: 100%;
+  }
+
+  figcaption {
+    margin: 1em 0 .5em !important;
+
+    .label {
+      float: left;
+      font-weight: bold;
+      margin-right: .5em;
+    }
+    p {
+      margin: 0;
+    }
+  }
+}
+
+figure.small {
+  width: 33%;
+}
+
+// Use block quote markup for both screen and print
+blockquote {
+  padding-left:1em !important;
+  border-left:0.25em solid #ccc !important;
+}
+
+.nobreak {
+  white-space: nowrap;
+}
+
+section, h1, h2, h3, h4, h5, h6, figure {
+  clear: both !important;
+}
+
+#appendices {
+  counter-reset: appendix !important;
+}
+
+.frontpage {
+  font-family: "UGent Panno Text", "Helvetica";
+}
+
+.logos {
+    display: flex;
+    flex-direction: row;
+}
+
+.logos > figure > img {
+  width: auto;
+}
+
+.noincrement {
+  counter-increment: none !important;
+  list-style-type: none !important;
+
+  &:before {
+    content: "" !important;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+main {
+  // Counters need to be *created* in Firefox and apparently, counter-reset does not do that
+  counter-set: h1counter h2counter h3counter h4counter !important;
+}
+
+h1:not(.noincrement) {
+  &::before {
+    content: "Chapter " counter(h1counter) ":\0000a0\0000a0" !important;
+    counter-increment: h1counter !important;
+  }
+}
+
+h1 {
+  counter-reset: h2counter !important;
+}
+
+h2:not(.noincrement) {
+  &::before {
+    content: counter(h2counter) ".\0000a0\0000a0" !important;
+    counter-increment: h2counter !important;
+  }
+  counter-reset: h3counter !important;
+}
+h3:not(.noincrement) {
+  &::before {
+    content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0" !important;
+    counter-increment: h3counter !important;
+  }
+  counter-reset: h4counter !important;
+}
+h4:not(.noincrement) {
+  &::before {
+    content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) ".\0000a0\0000a0" !important;
+    counter-increment: h4counter !important;
+  }
+}
+
+.appendix > * > h2, .appendix > h2 {
+  counter-increment: appendix !important;
+
+  &:before {
+    content: "Appendix " counter(appendix, upper-roman) ". " !important;
+  }
+}
+
+// Paragraphs
+p {
+  margin-bottom: 1em;
+}
+
+.listing {
+  font-size: 10pt;
+}
+
+figure.fullwidth {
+  width: fit-content;
+  float: none;
+}
+
+.nolabel {
+  &:before {
+    content: "" !important;
+  }
+}
+
+.nojustify > * {
+  text-align: start;
+}
+
+figure.listing {
+  width: auto;
+  float: none;
+}
+
+figure > .subfigures {
+  display: flex;
+  width: fit-content;
+
+  img {
+    padding: 1em;
+  }
+}
+
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('../fonts/LinLibertine_R.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Linux Libertine';
+  src: url('../fonts/LinLibertine_RB.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Linux Biolinum';
+  src: url('../fonts/LinBiolinum_R.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Linux Biolinum';
+  src: url('../fonts/LinBiolinum_RB.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.dict-of {
+  dt {
+    float: left;
+    clear: left;
+    width: 5em;
+    text-align: right;
+  }
+}
+
+dt {
+  margin-right: 1ch !important;
+}
+
+dd {
+  margin-left: 1em !important;
+}
+
+#table-of-contents ul , .list-of {
+  margin-bottom: 0;
+  margin-top: 0;
+  list-style-type: none;
+
+  ::before {
+    content: "";
+  }
+}
+
+.list-of li {
+  margin-left: 4em;
+  text-indent: -2em; // == 2 - margin-left
+}
+
+dl.references {
+  dd {
+    &::before {
+      content: "";
+    }
+  }
+  dt {
+    display: block;
   }
 }
