@@ -4,9 +4,9 @@ require 'nokogiri'
 
 Nanoc::Filter.define(:scholar_references_to_bibliography) do |content|
   doc = Nokogiri::HTML(content.dup)
-  references = doc.css("dl.references")
+  references = doc.css("dl.references:not(.custom-references)")
   if references
-    ref_title = doc.css("h2#references").unlink
+    doc.css("h2#references").unlink
     references.unlink
     doc.css("#bibliography").first.add_child(references)
   end

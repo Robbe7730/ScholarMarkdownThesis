@@ -1,4 +1,4 @@
-## Summary
+# Summary
 {:.noincrement}
 
-This is my [summary](cite:cites semanticweb) (max 1 page). It uses HTTP.
+In a nutshell, I wrote a thesis.

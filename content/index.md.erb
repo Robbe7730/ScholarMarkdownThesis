@@ -1,42 +1,115 @@
 ---
-title: My Master's Thesis
-people:
-  - name: Jan Janssens
-    url: https://example.com/jjanssens
-    webid: https://example.com/jjanssens#me
-    student_number: 0123456789
-    function: Author
-  - name: Prof. dr. Jef Jefferson
-    url: https://example.com/jjefferson
-    webid: https://example.com/jjefferson#me
-    function: Supervisor
-  - name: Peter Peterson
-    url: https://example.com/ppeterson
-    webid: https://example.com/ppeterson#me
-    function: Counsellor
+title: Your title here
+credit:
+  - attribution: Author
+    people:
+    - name: Jan Janssens
+      url: https://jan.janssens.be/
+      webid: https://jan.janssens.be/me
+      student_number: 012345678
+  - attribution: Supervisor
+    people:
+    - name: Prof. dr. Test Kees
+      url: https://test.nl/
+      webid: https://test.nl/card#me
+  - attribution: Counsellor
+    people:
+    - name: Marie Mariën
+      url: https://marien.solidcommunity.net/
+      webid: https://marien.solidcommunity.net/profile/card#me
+    - name: Stef Stevens
+      url: https://example.com/stefke
+      webid: https://stef_stevens.example.com
 degree: Master of Science in de informatica
 academic_year: 2021-2022
 ---
 
+<!-- Hack to make our custom fonts load in print-mode -->
+<!-- https://stackoverflow.com/questions/39364259/chrome-print-preview-doesnt-load-media-only-print-font-face -->
+<span class='printfont1'> </span>
+<span class='printfont2'> </span>
+<span class='printfont3'> </span>
+<span class='printfont4'> </span>
+
+<%# TODO: check https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure %>
 <main>
-  <%= section 'summary_en' %><span class="pagebreak"></span>
-  <%= section 'summary_nl' %><span class="pagebreak"></span>
-  <%= section 'extended_abstract_en' %><span class="pagebreak"></span>
-  <%= section 'extended_abstract_nl' %><span class="pagebreak"></span>
-  <%= section 'vulgarizing_summary' %><span class="pagebreak"></span>
-  <%= section 'acknowledgments' %><span class="pagebreak"></span>
-  <%= section 'permission' %><span class="pagebreak"></span>
-  <div id="scholarmarkdown-toc-index"></div><span class="pagebreak"></span>
+  <%= section 'permission', 'chapter', 'permisson-for-usage' %>
+  <%= section 'preface', 'chapter', 'preface' %>
+  <%= section 'acknowledgments', 'chapter', 'acknowledgments' %>
+  <%= section 'summary_en', 'chapter', 'summary-en' %>
+  <%= section 'summary_nl', 'chapter', 'summary-nl' %>
+  <%= section 'vulgarizing_summary', 'chapter', 'vulgarizing-summary' %>
 
-  <% (1..2).each do |num| %>
-    <%= section 'corpus/chapter' + num.to_s %><span class="pagebreak"></span>
-  <% end %>
+  <section class="acm chapter" id="extended-abstract-en">
+    <h1 class="noincrement printonly">
+        YOUR TITLE HERE
+    </h1>
+    <h1 class="noincrement screenonly">Extended Abstract (English)</h1>
+    <ul id="authors" class="printonly">
+      <% @item[:credit].each do |group| %>
+        <% group[:people].each do |author| %>
+          <li> <%= person author[:name], author[:url], author[:webid], false %> </li>
+        <% end %>
+      <% end %>
+    </ul>
 
-  <section id="bibliography"><h2 class="noincrement">Bibliography</h2></section><span class="pagebreak"></span>
+    <hr class="printonly">
+      <h2 class="noincrement">Abstract</h2>
+      <span id="abstract">
+        ABSTRACT OF THE EXTENDED ABSTRACT
+      </span>
+    <hr class="printonly">
+
+    <%= section 'extended_abstract_en', 'double-column' %>
+  </section>
+
+  <section class="acm chapter" id="extended-abstract-nl">
+    <h1 class="noincrement printonly">
+      UW TITEL HIER
+    </h1>
+    <h1 class="noincrement screenonly">Extended Abstract (Nederlands)</h1>
+    <ul id="authors" class="printonly">
+      <% @item[:credit].each do |group| %>
+        <% group[:people].each do |author| %>
+          <li> <%= person author[:name], author[:url], author[:webid], false %> </li>
+        <% end %>
+      <% end %>
+    </ul>
+
+    <hr class="printonly">
+      <h2 class="noincrement">Abstract</h2>
+      <span id="abstract">
+        ABSTRACT VAN HET EXTENDED ABSTRACT
+      </span>
+    <hr class="printonly">
+
+    <%= section 'extended_abstract_nl', 'double-column' %>
+  </section>
+
+  <section class="chapter" id="table-of-contents"></section>
+  <section class="chapter" id="list-of-figures"></section>
+  <section class="chapter" id="list-of-listings"></section>
+  <section class="chapter" id="list-of-acronyms"></section>
+  <section class="chapter" id="list-of-ontologies"></section>
+
+  <%= section 'corpus/introduction', 'chapter', 'introduction' %>
+
+  <%= section 'corpus/literature', 'chapter', 'literature-review' %>
+
+  <section class="chapter" id="lorem-ipsum">
+    <h1 id="methodology">Lorem Ipsum</h1>
+    <%= section 'corpus/lorem-ipsum/dolor', '', 'lorem-ipsum/dolor' %>
+    <%= section 'corpus/lorem-ipsum/sit', '', 'lorem-ipsum/sit' %>
+  </section>
+
+  <section class="chapter" id="lorem-ipsum-en">
+    <h1>Nor again is there anyone</h1>
+    <%= section 'corpus/lorem-ipsum-translated/who-loves', '', 'implementation/who-loves' %>
+    <%= section 'corpus/lorem-ipsum-translated/or-pursues', '', 'implementation/or-pursues'%>
+  </section>
+
+  <section class="chapter" id="bibliography">
+    <h1 class="noincrement">Bibliography</h1>
+  </section>
+
 </main>
-
-<section id="appendix"><h2 class="noincrement">Appendices</h2>
-<%= section 'list-of-acronyms' %>
-</section>
-
-<footer></footer>

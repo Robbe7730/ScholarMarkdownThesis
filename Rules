@@ -1,35 +1,42 @@
 #!/usr/bin/env ruby
 
-require 'scholarmarkdown/snippets'
-require 'scholarmarkdown/filter/acronym'
-require 'scholarmarkdown/filter/citation'
 require 'scholarmarkdown/filter/hyphenate_iri'
 require 'scholarmarkdown/filter/include_code'
-require 'scholarmarkdown/filter/labelify'
-require 'scholarmarkdown/filter/references_to_footer'
 require 'scholarmarkdown/filter/headerids_to_section'
 require 'scholarmarkdown/filter/citation_metadata'
+require 'scholarmarkdown/preprocess/katex'
 
 Encoding.default_external = "UTF-8"
 
+preprocess do
+  preprocess_katex_assets
+end
+
 compile '/index.*' do
   filter :erb
+  filter :custom_citation, bibfile: items['/references.bib'],
+                           section: items['/extended_abstract_en.md'],
+                           style: 'ieee',
+                           tag: "eaen"
+  filter :custom_citation, bibfile: items['/references.bib'],
+                           section: items['/extended_abstract_nl.md'],
+                           style: 'ieee',
+                           tag: "eanl"
   filter :scholar_citation, bibfile: items['/references.bib'],
-                            style: 'lncs-custom'
-  filter :kramdown
-  filter :scholar_acronym, acronyms: items['/acronyms.csv']
-
-  filter :scholar_hyphenate_iri
-  filter :scholar_include_code
-  filter :scholar_labelify
+                            style: 'ieee'
+  filter :kramdown, math_engine: 'sskatex',
+                  math_engine_opts: {
+                    :katex_js=> File.join(Katex.gem_path, 'vendor', 'katex', 'javascripts', 'katex.js')
+                  }
   filter :scholar_references_to_bibliography
-  filter :scholar_headerids_to_section
-  filter :rubypants
+  filter :scholar_labelify, acronyms: items['/acronyms.csv'],
+                            ontologies: items['/ontologies.csv']
+  filter :colorize_syntax, default_colorizer: :rouge
   layout '/default.*'
   filter :scholar_citation_metadata
 end
 
-ignore '/*.md'
+ignore '/**/*.md'
 ignore '/*.bib'
 ignore '/*.csv'
 

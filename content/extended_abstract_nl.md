@@ -1,4 +1,7 @@
-## Extended Abstract
-{:.noincrement}
+## Introductie
 
-Dit is hetzelfde extended abstract, maar dan in het Nederlands (2-6 pagina's)
+Abstract, maar meer uitgebreid[](cite:cites
+CommunitySolidServerCommunitySolidServerOpen)
+
+## Bibliografie
+{:.noincrement#eanl-bibliography}
