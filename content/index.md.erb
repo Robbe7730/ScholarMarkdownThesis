@@ -33,12 +33,9 @@ academic_year: 2021-2022
 
 <%# TODO: check https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Document_and_website_structure %>
 <main>
-  <%= section 'permission', 'chapter', 'permisson-for-usage' %>
   <%= section 'preface', 'chapter', 'preface' %>
-  <%= section 'acknowledgments', 'chapter', 'acknowledgments' %>
-  <%= section 'summary_en', 'chapter', 'summary-en' %>
   <%= section 'summary_nl', 'chapter', 'summary-nl' %>
-  <%= section 'vulgarizing_summary', 'chapter', 'vulgarizing-summary' %>
+  <%= section 'summary_en', 'chapter', 'summary-en' %>
 
   <section class="acm chapter" id="extended-abstract-en">
     <h1 class="noincrement printonly">
@@ -52,13 +49,6 @@ academic_year: 2021-2022
         <% end %>
       <% end %>
     </ul>
-
-    <hr class="printonly">
-      <h2 class="noincrement">Abstract</h2>
-      <span id="abstract">
-        ABSTRACT OF THE EXTENDED ABSTRACT
-      </span>
-    <hr class="printonly">
 
     <%= section 'extended_abstract_en', 'double-column' %>
   </section>
@@ -76,15 +66,10 @@ academic_year: 2021-2022
       <% end %>
     </ul>
 
-    <hr class="printonly">
-      <h2 class="noincrement">Abstract</h2>
-      <span id="abstract">
-        ABSTRACT VAN HET EXTENDED ABSTRACT
-      </span>
-    <hr class="printonly">
-
     <%= section 'extended_abstract_nl', 'double-column' %>
   </section>
+  <%= section 'acknowledgments', 'chapter', 'acknowledgments' %>
+  <%= section 'permission', 'chapter', 'permisson-for-usage' %>
 
   <section class="chapter" id="table-of-contents"></section>
   <section class="chapter" id="list-of-figures"></section>
