@@ -30,6 +30,9 @@ Nanoc::Filter.define(:scholar_labelify) do |content, params|
   # Keep track if we are in a numbered section
   @numbered = [false, false, false, false]
 
+  # Keep track if we are in an appendix section
+  @appendix = [false, false, false, false]
+
   # Keep the ToC entries
   @toc_entries = []
 
@@ -148,13 +151,15 @@ def process_title node
 
   index = ["h1", "h2", "h3", "h4"].index node.name
 
-  # Indicate if we are in a numbered section
+  # Indicate if we are in a numbered or appendix section
   # A section is numbered if it does not have the "noincrement" class and none
   # of the parent headers are not numbered
   numbered = !(node.classes.include? "noincrement") && (0..(index-1)).none? { |x| !@numbered[x] }
+  appendix = (node.parent.classes.include? "appendix") || (node.classes.include? "appendices") && (0..(index-1)).none? { |x| !@appendix[x] }
 
   for i in index..3
     @numbered[i] = numbered
+    @appendix[i] = appendix
   end
 
   if @display_name.has_key?(node[:id])
@@ -173,37 +178,77 @@ def process_title node
     # Next, find the display name and add it to the ToC
     case node.name
     when "h1"
-      @display_name[node[:id]] = "Chapter %d" % @section_numbering
-      @toc_entries.append({
-        :number => "%d" % @section_numbering,
-        :name => node.text,
-        :id => node[:id],
-        :children => []
-      })
+      if @appendix[index]
+        @display_name[node[:id]] = @section_numbering
+        @toc_entries.append({
+          :number => "",
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      else
+        @display_name[node[:id]] = "Chapter %d" % @section_numbering
+        @toc_entries.append({
+          :number => "%d" % @section_numbering,
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      end
     when "h2"
-      @display_name[node[:id]] = "Section %d.%d" % @section_numbering
-      @toc_entries.last[:children].append({
-        :number => "%d.%d" % @section_numbering,
-        :name => node.text,
-        :id => node[:id],
-        :children => []
-      })
+      if @appendix[index]
+        @display_name[node[:id]] ="Appendix %s" % (@section_numbering[1] + 64).chr
+        @toc_entries.last[:children].append({
+          :number => "%s" % (@section_numbering[1] + 64).chr,
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      else
+        @display_name[node[:id]] = "Section %d.%d" % @section_numbering
+        @toc_entries.last[:children].append({
+          :number => "%d.%d" % @section_numbering,
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      end
     when "h3"
-      @display_name[node[:id]] = "Subsection %d.%d.%d" % @section_numbering
-      @toc_entries.last[:children].last[:children].append({
-        :number => "%d.%d.%d" % @section_numbering,
-        :name => node.text,
-        :id => node[:id],
-        :children => []
-      })
+      if @appendix[index]
+        @display_name[node[:id]] = "Section %s.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2]]
+        @toc_entries.last[:children].last[:children].append({
+          :number => "%s.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2]],
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      else
+        @display_name[node[:id]] = "Subsection %d.%d.%d" % @section_numbering
+        @toc_entries.last[:children].last[:children].append({
+          :number => "%d.%d.%d" % @section_numbering,
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      end
     when "h4"
-      @display_name[node[:id]] = "Subsubsection %d.%d.%d.%d" % @section_numbering
-      @toc_entries.last[:children].last[:children].last[:children].append({
-        :number => "%d.%d.%d.%d" % @section_numbering,
-        :name => node.text,
-        :id => node[:id],
-        :children => []
-      })
+      if @appendix[index]
+        @display_name[node[:id]] = "Subsection %s.%d.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2], @section_numbering[3]]
+        @toc_entries.last[:children].last[:children].last[:children].append({
+          :number => "%s.%d.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2], @section_numbering[3]],
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      else
+        @display_name[node[:id]] = "Subsubsection %d.%d.%d.%d" % @section_numbering
+        @toc_entries.last[:children].last[:children].last[:children].append({
+          :number => "%d.%d.%d.%d" % @section_numbering,
+          :name => node.text,
+          :id => node[:id],
+          :children => []
+        })
+      end
     end
 
   end
