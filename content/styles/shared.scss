@@ -167,7 +167,7 @@ section, h1, h2, h3, h4, h5, h6, figure {
   width: auto;
 }
 
-.noincrement {
+.noincrement, .appendices {
   counter-increment: none !important;
   list-style-type: none !important;
 
@@ -189,7 +189,7 @@ main {
   counter-set: h1counter h2counter h3counter h4counter !important;
 }
 
-h1:not(.noincrement) {
+h1:not(.noincrement, .appendices) {
   &::before {
     content: "Chapter " counter(h1counter) ":\0000a0\0000a0" !important;
     counter-increment: h1counter !important;
@@ -225,7 +225,19 @@ h4:not(.noincrement) {
   counter-increment: appendix !important;
 
   &:before {
-    content: "Appendix " counter(appendix, upper-roman) ". " !important;
+    content: counter(appendix, upper-alpha) ". " !important;
+  }
+}
+
+.appendix > * > h3, .appendix > h3 {
+  &:before {
+    content: counter(appendix, upper-alpha) "." counter(h3counter) ".\0000a0\0000a0" !important;
+  }
+}
+
+.appendix > * > h4, .appendix > h4 {
+  &:before {
+    content: counter(appendix, upper-alpha) "." counter(h3counter) "." counter(h4counter) ".\0000a0\0000a0" !important;
   }
 }
 
