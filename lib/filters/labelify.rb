@@ -162,6 +162,17 @@ def process_title node
     @appendix[i] = appendix
   end
 
+  # Add an incrementing counter at the end of the node ID in case it is not unique
+  while @display_name.has_key?(node[:id])
+    if node[:id].match(/_[0-9]+$/)
+      # Increment the counter
+      node[:id] = node[:id].gsub(/\d+$/,&:next)
+    else
+      # Add the counter
+      node[:id] += "_1"
+    end
+  end
+  # Should now be unique
   if @display_name.has_key?(node[:id])
     raise "Duplicate id: " + node[:id]
   end
