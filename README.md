@@ -30,7 +30,7 @@ submitted version was generated in **Firefox** with a scale of 100 and margins o
 0.78 inch.
 Set `print.save_as_pdf.internal_destinations.enabled` to `true` in
 Firefox's `about:config` to make internal links to e.g. other sections work in
-the PDF version.
+the PDF version. This might entirely break PDF generation though.
 Printing from Google Chrome gives an incorrect result, only Firefox is supported
 at the moment.
 
