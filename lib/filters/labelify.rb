@@ -156,7 +156,7 @@ def process_title node
   new_id = node.text
   new_id.downcase!
   new_id.gsub! %r{(?<=[a-zA-Z0-9()])[ \-_/](?=[a-zA-Z0-9()])}, "-"
-  # new_id.gsub! %r{[^a-z\-]}, ""
+  new_id.gsub! %r{[^a-z\-]}, ""
   node[:id] = node.name + ":" + current_chapter[:id] + "/" + new_id
 
   index = ["h1", "h2", "h3", "h4"].index node.name
