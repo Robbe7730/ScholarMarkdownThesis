@@ -20,6 +20,7 @@ Nanoc::Filter.define(:scholar_labelify) do |content, params|
   # Keep track of figures and listings
   @figures = []
   @listings = []
+  @tables = []
 
   # Maps ID to how they should be referenced (in text)
   @display_name = {}
@@ -72,6 +73,8 @@ def process_node_2 node
     process_link node
   elsif node[:id] == "list-of-listings"
     create_list node, @listings, "Listing"
+  elsif node[:id] == "list-of-tables"
+    create_list node, @tables, "Table"
   elsif node[:id] == "list-of-figures"
     create_list node, @figures, "Figure"
   elsif node[:id] == "table-of-contents"
@@ -91,8 +94,12 @@ def process_figure node
     raise "Invalid id for listing " + node[:id]
   end
 
+  if (node[:class] && (node[:class].include? "table") && !(node[:id].start_with? "tbl:"))
+    raise "Invalid id for table " + node[:id]
+  end
+
   # No listing == figure
-  if ((!node[:class] || !(node[:class].include? "listing")) && !(node[:id].start_with? "fig:"))
+  if ((!node[:class] || (!(node[:class].include? "listing") && !((node[:class].include? "table")))) && !(node[:id].start_with? "fig:"))
     raise "Invalid id for figure " + node[:id]
   end
 
@@ -113,6 +120,12 @@ def process_figure node
       :ref => node[:id]
     })
     label_value = "Listing " + @listings.size.to_s
+  elsif node.classes().include? "table"
+    @tables.append({
+      :text => caption,
+      :ref => node[:id]
+    })
+    label_value = "Table " + @tables.size.to_s
   else
     @figures.append({
       :text => caption,
