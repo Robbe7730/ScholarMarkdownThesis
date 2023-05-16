@@ -147,7 +147,10 @@ def process_title node
   new_id.downcase!
   new_id.gsub! %r{(?<=[a-zA-Z0-9()])[ \-_/](?=[a-zA-Z0-9()])}, "-"
   new_id.gsub! %r{[^a-z\-]}, ""
-  node[:id] = node.name + ":" + current_chapter[:id] + "/" + new_id
+  if not node["id"]
+    # Only automatically add generated ID in case no ID was manually specified
+    node[:id] = node.name + ":" + current_chapter[:id] + "/" + new_id
+  end
 
   index = ["h1", "h2", "h3", "h4"].index node.name
 

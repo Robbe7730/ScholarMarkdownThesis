@@ -24,7 +24,7 @@ compile '/index.*' do
                            tag: "eanl"
   filter :scholar_citation, bibfile: items['/references.bib'],
                             style: 'ieee'
-  filter :kramdown, math_engine: 'sskatex',
+  filter :kramdown, auto_ids: false, math_engine: 'sskatex',
                   math_engine_opts: {
                     :katex_js=> File.join(Katex.gem_path, 'vendor', 'katex', 'javascripts', 'katex.js')
                   }
