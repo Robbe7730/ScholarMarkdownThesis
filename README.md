@@ -37,3 +37,4 @@ at the moment.
 ## Examples
 
 - https://thesis.robbevanherck.be
+- https://thesis.jan-pieter.be
