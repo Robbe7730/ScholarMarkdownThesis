@@ -167,11 +167,12 @@ def process_title node
 
   index = ["h1", "h2", "h3", "h4"].index node.name
 
-  # Indicate if we are in a numbered or appendix section
+  # Indicate if we are in a numbered, appendix, or standalone section
   # A section is numbered if it does not have the "noincrement" class and none
   # of the parent headers are not numbered
   numbered = !(node.classes.include? "noincrement") && (0..(index-1)).none? { |x| !@numbered[x] }
   appendix = (node.parent.classes.include? "appendix") || (node.classes.include? "appendices") && (0..(index-1)).none? { |x| !@appendix[x] }
+  standalone = (node.parent.classes.include? "standalone") || (node.classes.include? "standalone") && (0..(index-1)).none? { |x| !@standalone[x] }
 
   for i in index..3
     @numbered[i] = numbered
@@ -193,19 +194,23 @@ def process_title node
     raise "Duplicate id: " + node[:id]
   end
 
-  if not @numbered[index]
+  if (not @numbered[index]) && (not standalone)
     @display_name[node[:id]] = node.text
   else
     # First, update numbering
     for i in (index+1)..3
       @section_numbering[i] = 0
     end
-    @section_numbering[index] += 1
+    if (not standalone) || index != 0
+      @section_numbering[index] += 1
+    end
 
     # Next, find the display name and add it to the ToC
     case node.name
     when "h1"
-      if @appendix[index]
+      if standalone
+        @display_name[node[:id]] = node.text
+      elsif @appendix[index]
         @display_name[node[:id]] = @section_numbering
         @toc_entries.append({
           :number => "",
@@ -223,7 +228,9 @@ def process_title node
         })
       end
     when "h2"
-      if @appendix[index]
+      if standalone
+        @display_name[node[:id]] = "Section %d" % [@section_numbering[1]]
+      elsif @appendix[index]
         @display_name[node[:id]] ="Appendix %s" % (@section_numbering[1] + 64).chr
         @toc_entries.last[:children].append({
           :number => "%s" % (@section_numbering[1] + 64).chr,
@@ -241,7 +248,9 @@ def process_title node
         })
       end
     when "h3"
-      if @appendix[index]
+      if standalone
+        @display_name[node[:id]] = "Subsection %d.%d" % [@section_numbering[1], @section_numbering[2]]
+      elsif @appendix[index]
         @display_name[node[:id]] = "Section %s.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2]]
         @toc_entries.last[:children].last[:children].append({
           :number => "%s.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2]],
@@ -259,7 +268,9 @@ def process_title node
         })
       end
     when "h4"
-      if @appendix[index]
+      if standalone
+        @display_name[node[:id]] = "Subsubsection %d.%d.%d" % [@section_numbering[1], @section_numbering[2], @section_numbering[3]]
+      elsif @appendix[index]
         @display_name[node[:id]] = "Subsection %s.%d.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2], @section_numbering[3]]
         @toc_entries.last[:children].last[:children].last[:children].append({
           :number => "%s.%d.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2], @section_numbering[3]],
