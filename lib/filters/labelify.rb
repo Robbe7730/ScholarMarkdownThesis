@@ -17,19 +17,24 @@ Nanoc::Filter.define(:scholar_labelify) do |content, params|
 
   content = Nokogiri::HTML(content.dup)
 
-  # Keep track of figures and listings
+  # Keep track of figures, listings, and tables
   @figures = []
+  @figures_standalone = []
   @listings = []
+  @listings_standalone = []
   @tables = []
+  @tables_standalone = []
 
   # Maps ID to how they should be referenced (in text)
   @display_name = {}
 
   # Keep the section numbering ([chapter, section, subsection, subsubsection])
   @section_numbering = [0, 0, 0, 0]
+  @section_numbering_standalone = [0, 0, 0, 0]
 
   # Keep track if we are in a numbered section
   @numbered = [false, false, false, false]
+  @numbered_standalone = [true, false, false, false]
 
   # Keep track if we are in an appendix section
   @appendix = [false, false, false, false]
@@ -69,14 +74,18 @@ def process_node_1 node
 end
 
 def process_node_2 node
+  standalone = (node.classes.include? "standalone") || (node.ancestors.any? { |p| p.classes.include? "standalone" })
   if node.name == "a"
     process_link node
   elsif node[:id] == "list-of-listings"
-    create_list node, @listings, "Listing"
+    list_to_use = standalone ? @listings_standalone : @listings
+    create_list node, list_to_use, "Listing"
   elsif node[:id] == "list-of-tables"
-    create_list node, @tables, "Table"
+    list_to_use = standalone ? @tables_standalone : @tables
+    create_list node, list_to_use, "Table"
   elsif node[:id] == "list-of-figures"
-    create_list node, @figures, "Figure"
+    list_to_use = standalone ? @figures_standalone : @figures
+    create_list node, list_to_use, "Figure"
   elsif node[:id] == "table-of-contents"
     create_toc node
   elsif node[:id] == "list-of-acronyms"
@@ -90,6 +99,9 @@ end
 
 # Add label to figures and listings and keep their captions in the corresponding lists
 def process_figure node
+
+  standalone = (node.classes.include? "standalone") || (node.ancestors.any? { |p| p.classes.include? "standalone" })
+
   if (node[:class] && (node[:class].include? "listing") && !(node[:id].start_with? "lst:"))
     raise "Invalid id for listing " + node[:id]
   end
@@ -115,23 +127,26 @@ def process_figure node
   caption.gsub! "\n", " "
 
   if node.classes().include? "listing"
-    @listings.append({
+    list_to_use = standalone ? @listings_standalone : @listings
+    list_to_use.append({
       :text => caption,
       :ref => node[:id]
     })
-    label_value = "Listing " + @listings.size.to_s
+    label_value = "Listing " + list_to_use.size.to_s
   elsif node.classes().include? "table"
-    @tables.append({
+    list_to_use = standalone ? @tables_standalone : @tables
+    list_to_use.append({
       :text => caption,
       :ref => node[:id]
     })
-    label_value = "Table " + @tables.size.to_s
+    label_value = "Table " + list_to_use.size.to_s
   else
-    @figures.append({
+    list_to_use = standalone ? @figures_standalone : @figures
+    list_to_use.append({
       :text => caption,
       :ref => node[:id]
     })
-    label_value = "Figure " + @figures.size.to_s
+    label_value = "Figure " + list_to_use.size.to_s
   end
 
   if @display_name.has_key?(node[:id])
@@ -170,12 +185,23 @@ def process_title node
   # Indicate if we are in a numbered, appendix, or standalone section
   # A section is numbered if it does not have the "noincrement" class and none
   # of the parent headers are not numbered
-  numbered = !(node.classes.include? "noincrement") && (0..(index-1)).none? { |x| !@numbered[x] }
+  standalone = (node.classes.include? "standalone") || (node.ancestors.any? { |p| p.classes.include? "standalone"  })
+  numbered = !(node.classes.include? "noincrement") && (0..(index-1)).all? { |x| if standalone then @numbered_standalone[x] else @numbered[x] end }
   appendix = (node.parent.classes.include? "appendix") || (node.classes.include? "appendices") && (0..(index-1)).none? { |x| !@appendix[x] }
-  standalone = (node.parent.classes.include? "standalone") || (node.classes.include? "standalone") && (0..(index-1)).none? { |x| !@standalone[x] }
+
+  if standalone && index == 0
+    @listings_standalone = []
+    @figures_standalone = []
+    @section_numbering_standalone = [0, 0, 0, 0]
+    @numbered_standalone = [false, false, false, false]
+  end
 
   for i in index..3
-    @numbered[i] = numbered
+    if standalone
+      @numbered_standalone[i] = numbered
+    else
+      @numbered[i] = numbered
+    end
     @appendix[i] = appendix
   end
 
@@ -194,15 +220,23 @@ def process_title node
     raise "Duplicate id: " + node[:id]
   end
 
-  if (not @numbered[index]) && (not standalone)
+  if (not numbered) && (not standalone)
     @display_name[node[:id]] = node.text
   else
     # First, update numbering
     for i in (index+1)..3
-      @section_numbering[i] = 0
+      if standalone
+        @section_numbering_standalone[i] = 0
+      else
+        @section_numbering[i] = 0
+      end
     end
-    if (not standalone) || index != 0
-      @section_numbering[index] += 1
+    if numbered
+      if standalone
+        @section_numbering_standalone[index] += 1
+      else
+        @section_numbering[index] += 1
+      end
     end
 
     # Next, find the display name and add it to the ToC
@@ -229,7 +263,7 @@ def process_title node
       end
     when "h2"
       if standalone
-        @display_name[node[:id]] = "Section %d" % [@section_numbering[1]]
+        @display_name[node[:id]] = "Section %d" % [@section_numbering_standalone[1]]
       elsif @appendix[index]
         @display_name[node[:id]] ="Appendix %s" % (@section_numbering[1] + 64).chr
         @toc_entries.last[:children].append({
@@ -249,7 +283,7 @@ def process_title node
       end
     when "h3"
       if standalone
-        @display_name[node[:id]] = "Subsection %d.%d" % [@section_numbering[1], @section_numbering[2]]
+        @display_name[node[:id]] = "Subsection %d.%d" % [@section_numbering_standalone[1], @section_numbering_standalone[2]]
       elsif @appendix[index]
         @display_name[node[:id]] = "Section %s.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2]]
         @toc_entries.last[:children].last[:children].append({
@@ -269,7 +303,7 @@ def process_title node
       end
     when "h4"
       if standalone
-        @display_name[node[:id]] = "Subsubsection %d.%d.%d" % [@section_numbering[1], @section_numbering[2], @section_numbering[3]]
+        @display_name[node[:id]] = "Subsubsection %d.%d.%d" % [@section_numbering_standalone[1], @section_numbering_standalone[2], @section_numbering_standalone[3]]
       elsif @appendix[index]
         @display_name[node[:id]] = "Subsection %s.%d.%d" % [(@section_numbering[1] + 64).chr, @section_numbering[2], @section_numbering[3]]
         @toc_entries.last[:children].last[:children].last[:children].append({
@@ -294,14 +328,23 @@ def process_title node
 end
 
 def process_section node
+  standalone = (node.classes.include? "standalone") || (node.ancestors.any? { |p| p.classes.include? "standalone" })
   if @display_name.has_key?(node[:id])
     raise "Duplicate id: " + node[:id]
   end
 
   if node[:class] && (node[:class].include? "chapter")
-    @display_name[node[:id]] = "Chapter %d" % @section_numbering
+    if standalone
+      @display_name[node[:id]] = "Chapter %d" % @section_numbering_standalone
+    else
+      @display_name[node[:id]] = "Chapter %d" % @section_numbering
+    end
   else
-    @display_name[node[:id]] = "Section %d.%d" % @section_numbering
+    if standalone
+      @display_name[node[:id]] = "Section %d.%d" % @section_numbering_standalone
+    else
+      @display_name[node[:id]] = "Section %d.%d" % @section_numbering
+    end
   end
 end
 

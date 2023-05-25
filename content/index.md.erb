@@ -37,11 +37,11 @@ academic_year: 2021-2022
   <%= section 'summary_nl', 'chapter', 'summary-nl' %>
   <%= section 'summary_en', 'chapter', 'summary-en' %>
 
-  <section class="acm chapter" id="extended-abstract-en">
-    <h1 class="noincrement printonly">
+  <section class="acm chapter standalone" id="extended-abstract-en">
+    <h1 class="nolabel printonly">
         YOUR TITLE HERE
     </h1>
-    <h1 class="noincrement screenonly">Extended Abstract (English)</h1>
+    <h1 class="nolabel screenonly">Extended Abstract (English)</h1>
     <ul id="authors" class="printonly">
       <% @item[:credit].each do |group| %>
         <% group[:people].each do |author| %>
@@ -57,14 +57,14 @@ academic_year: 2021-2022
       </span>
     <hr class="printonly">
 
-    <%= section 'extended_abstract_en', 'double-column standalone' %>
+    <%= section 'extended_abstract_en', 'double-column' %>
   </section>
 
-  <section class="acm chapter" id="extended-abstract-nl">
-    <h1 class="noincrement printonly">
+  <section class="acm chapter standalone" id="extended-abstract-nl">
+    <h1 class="nolabel printonly">
       UW TITEL HIER
     </h1>
-    <h1 class="noincrement screenonly">Extended Abstract (Nederlands)</h1>
+    <h1 class="nolabel screenonly">Extended Abstract (Nederlands)</h1>
     <ul id="authors" class="printonly">
       <% @item[:credit].each do |group| %>
         <% group[:people].each do |author| %>
@@ -80,7 +80,7 @@ academic_year: 2021-2022
       </span>
     <hr class="printonly">
 
-    <%= section 'extended_abstract_nl', 'double-column standalone' %>
+    <%= section 'extended_abstract_nl', 'double-column' %>
   </section>
   <%= section 'acknowledgments', 'chapter', 'acknowledgments' %>
   <%= section 'permission', 'chapter', 'permisson-for-usage' %>
