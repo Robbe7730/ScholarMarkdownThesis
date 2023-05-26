@@ -38,3 +38,4 @@ at the moment.
 
 - https://thesis.robbevanherck.be
 - https://thesis.jan-pieter.be
+- https://thesis.smessie.com
