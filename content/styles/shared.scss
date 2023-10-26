@@ -189,7 +189,7 @@ main {
   counter-set: h1counter h2counter h3counter h4counter !important;
 }
 
-h1:not(.noincrement, .appendices) {
+h1:not(.noincrement, .appendices, .nolabel) {
   &::before {
     content: "Chapter " counter(h1counter) ":\0000a0\0000a0" !important;
     counter-increment: h1counter !important;
@@ -200,21 +200,21 @@ h1 {
   counter-reset: h2counter !important;
 }
 
-h2:not(.noincrement) {
+h2:not(.noincrement, .nolabel) {
   &::before {
     content: counter(h2counter) ".\0000a0\0000a0" !important;
     counter-increment: h2counter !important;
   }
   counter-reset: h3counter !important;
 }
-h3:not(.noincrement) {
+h3:not(.noincrement, .nolabel) {
   &::before {
     content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0" !important;
     counter-increment: h3counter !important;
   }
   counter-reset: h4counter !important;
 }
-h4:not(.noincrement) {
+h4:not(.noincrement, .nolabel) {
   &::before {
     content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) ".\0000a0\0000a0" !important;
     counter-increment: h4counter !important;
